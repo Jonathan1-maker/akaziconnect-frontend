@@ -7,6 +7,8 @@ import WorkerCard from '@/components/WorkerCard';
 import WorkerCardSkeleton from '@/components/WorkerCardSkeleton';
 import { useT } from '@/lib/LangContext';
 
+export const dynamic = 'force-dynamic';
+
 const stagger = { show: { transition: { staggerChildren: 0.07 } } };
 
 function WorkersContent() {

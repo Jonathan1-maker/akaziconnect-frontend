@@ -6,6 +6,8 @@ import Link from 'next/link';
 import api from '@/lib/api';
 import { useT } from '@/lib/LangContext';
 
+export const dynamic = 'force-dynamic';
+
 const TYPE_KEYS = ['full-time', 'part-time', 'contract', 'temporary'];
 const TYPE_COLORS = {
   'full-time': 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
