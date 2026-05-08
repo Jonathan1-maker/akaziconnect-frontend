@@ -7,8 +7,13 @@ import { NotificationProvider } from '@/lib/NotificationContext';
 import { LangProvider } from '@/lib/LangContext';
 
 export const metadata = {
-  title:  'AkaziConnect — Find Trusted Workers Near You',
+  title: 'AkaziConnect — Find Trusted Workers Near You',
   description: 'Connect with skilled workers in Rwanda instantly.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({ children }) {
