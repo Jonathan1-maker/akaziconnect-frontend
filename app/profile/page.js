@@ -199,6 +199,29 @@ export default function WorkerProfilePage() {
 
       {/* Change Password */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col gap-4 mt-2">
+        <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">📧 Email for Password Reset</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">Add your email so you can reset your password if you forget it.</p>
+        <div className="flex gap-2">
+          <input type="email" id="emailField"
+            defaultValue={user?.email || ''}
+            placeholder="your@email.com"
+            className="flex-1 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm text-gray-800 dark:text-white outline-none focus:border-blue-400 transition-colors" />
+          <button onClick={async () => {
+            const email = document.getElementById('emailField').value;
+            if (!email) return;
+            try {
+              await api.put('/auth/update-email', { email });
+              setPwMsg({ text: '✅ Email saved!', ok: true });
+            } catch (err) {
+              setPwMsg({ text: err.response?.data?.message || 'Failed to save email', ok: false });
+            }
+          }} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors whitespace-nowrap">
+            Save
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col gap-4 mt-2">
         <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">🔐 Change Password</p>
         <div>
           <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Current Password</label>

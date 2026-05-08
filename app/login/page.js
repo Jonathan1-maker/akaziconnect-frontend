@@ -63,11 +63,6 @@ export default function LoginPage() {
                 {showPassword ? '🙈' : '👁️'}
               </button>
             </div>
-            <div className="text-right mt-1">
-              <Link href="/reset-password" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
-                {t('login.forgotPassword')}
-              </Link>
-            </div>
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <button type="submit" disabled={loading}
