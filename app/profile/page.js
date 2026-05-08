@@ -20,6 +20,10 @@ export default function WorkerProfilePage() {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState({ text: '', ok: true });
   const [fetching, setFetching] = useState(true);
+  const [pwForm, setPwForm] = useState({ current: '', newPw: '', confirm: '' });
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwMsg, setPwMsg] = useState({ text: '', ok: true });
+  const [showPw, setShowPw] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.push('/login');
@@ -192,6 +196,53 @@ export default function WorkerProfilePage() {
           {saving ? 'Saving…' : 'Save Changes'}
         </button>
       </form>
+
+      {/* Change Password */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 p-6 flex flex-col gap-4 mt-2">
+        <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">🔐 Change Password</p>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Current Password</label>
+          <input type={showPw ? 'text' : 'password'} value={pwForm.current} onChange={(e) => setPwForm((f) => ({ ...f, current: e.target.value }))}
+            placeholder="Your current password"
+            className="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm text-gray-800 dark:text-white outline-none focus:border-blue-400 transition-colors" />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">New Password</label>
+          <input type={showPw ? 'text' : 'password'} value={pwForm.newPw} onChange={(e) => setPwForm((f) => ({ ...f, newPw: e.target.value }))}
+            placeholder="Min. 6 characters"
+            className="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm text-gray-800 dark:text-white outline-none focus:border-blue-400 transition-colors" />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Confirm New Password</label>
+          <input type={showPw ? 'text' : 'password'} value={pwForm.confirm} onChange={(e) => setPwForm((f) => ({ ...f, confirm: e.target.value }))}
+            placeholder="Repeat new password"
+            className="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm text-gray-800 dark:text-white outline-none focus:border-blue-400 transition-colors" />
+        </div>
+        <label className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 cursor-pointer">
+          <input type="checkbox" checked={showPw} onChange={(e) => setShowPw(e.target.checked)} className="rounded" />
+          Show passwords
+        </label>
+        {pwMsg.text && (
+          <p className={`text-sm font-medium px-4 py-3 rounded-xl ${pwMsg.ok ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/20 text-red-500'}`}>
+            {pwMsg.text}
+          </p>
+        )}
+        <button onClick={async () => {
+          if (pwForm.newPw !== pwForm.confirm) return setPwMsg({ text: 'Passwords do not match', ok: false });
+          if (pwForm.newPw.length < 6) return setPwMsg({ text: 'Password must be at least 6 characters', ok: false });
+          setPwSaving(true); setPwMsg({ text: '', ok: true });
+          try {
+            await api.put('/auth/change-password', { currentPassword: pwForm.current, newPassword: pwForm.newPw });
+            setPwMsg({ text: '✅ Password changed successfully!', ok: true });
+            setPwForm({ current: '', newPw: '', confirm: '' });
+          } catch (err) {
+            setPwMsg({ text: err.response?.data?.message || 'Failed to change password', ok: false });
+          } finally { setPwSaving(false); }
+        }} disabled={pwSaving || !pwForm.current || !pwForm.newPw || !pwForm.confirm}
+          className="bg-gray-800 hover:bg-gray-900 dark:bg-slate-600 dark:hover:bg-slate-500 disabled:opacity-50 text-white py-3 rounded-xl font-semibold text-sm transition-colors">
+          {pwSaving ? 'Changing…' : 'Change Password'}
+        </button>
+      </div>
     </div>
   );
 }

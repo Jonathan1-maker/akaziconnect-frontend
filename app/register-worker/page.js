@@ -8,7 +8,7 @@ export default function RegisterWorkerPage() {
   const t = useT();
   const router = useRouter();
   const [categories, setCategories] = useState([]);
-  const [form, setForm] = useState({ name: '', phone: '', whatsapp: '', category: '', location: '', description: '', yearsOfExperience: '' });
+  const [form, setForm] = useState({ name: '', phone: '', password: '', whatsapp: '', category: '', location: '', description: '', yearsOfExperience: '' });
   const [photo, setPhoto] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,7 +28,7 @@ export default function RegisterWorkerPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        const { data } = await api.post('/auth/register', { name: form.name, phone: form.phone, role: 'worker' });
+        const { data } = await api.post('/auth/register', { name: form.name, phone: form.phone, password: form.password, role: 'worker' });
         localStorage.setItem('token', data.token);
       }
 
@@ -57,6 +57,7 @@ export default function RegisterWorkerPage() {
   const fields = [
     { name: 'name',              label: t('register.fullName'),    placeholder: t('register.fullNamePlaceholder'),    required: true },
     { name: 'phone',             label: t('register.phone'),       placeholder: t('register.phonePlaceholder'),       required: true },
+    { name: 'password',          label: t('login.passwordLabel'),  placeholder: 'Min. 6 characters',                  required: true, type: 'password' },
     { name: 'whatsapp',          label: t('register.whatsapp'),    placeholder: t('register.phonePlaceholder') },
     { name: 'location',          label: t('register.location'),    placeholder: t('register.locationPlaceholder'),    required: true },
     { name: 'yearsOfExperience', label: t('register.experience'),  placeholder: t('register.experiencePlaceholder'),  type: 'number' },

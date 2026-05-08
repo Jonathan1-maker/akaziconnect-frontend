@@ -9,7 +9,7 @@ import { useT } from '@/lib/LangContext';
 
 export default function RegisterCompanyPage() {
   const t = useT();
-  const [form, setForm] = useState({ name: '', phone: '' });
+  const [form, setForm] = useState({ name: '', phone: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
@@ -18,7 +18,7 @@ export default function RegisterCompanyPage() {
   const handleSubmit = async (e) => {
     e.preventDefault(); setLoading(true); setError('');
     try {
-      const { data } = await api.post('/auth/register', { name: form.name, phone: form.phone, role: 'company' });
+      const { data } = await api.post('/auth/register', { name: form.name, phone: form.phone, password: form.password, role: 'company' });
       login(data, data.token);
       router.push('/jobs/post');
     } catch (err) { setError(err.response?.data?.message || t('common.error')); }
@@ -44,6 +44,12 @@ export default function RegisterCompanyPage() {
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('registerCompany.phone')}</label>
             <input type="text" value={form.phone} onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
               placeholder="+250 7XX XXX XXX" required
+              className="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-white outline-none focus:border-blue-400 transition-colors" />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('login.passwordLabel')}</label>
+            <input type="password" value={form.password} onChange={(e) => setForm((f) => ({ ...f, password: e.target.value }))}
+              placeholder="Min. 6 characters" required minLength={6}
               className="w-full bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm text-gray-800 dark:text-white outline-none focus:border-blue-400 transition-colors" />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
