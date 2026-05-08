@@ -233,7 +233,7 @@ export default function HomePage() {
       {/* ── Stats ── */}
       <section className="bg-white dark:bg-slate-800 border-b border-gray-100 dark:border-slate-700">
         <motion.div
-          className="max-w-4xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-6"
+          className="max-w-4xl mx-auto px-4 py-5 grid grid-cols-2 md:grid-cols-4 gap-4"
           variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}
         >
           {stats.map((s) => (
@@ -247,10 +247,10 @@ export default function HomePage() {
       </section>
 
       {/* ── Categories ── */}
-      <section className="max-w-5xl mx-auto px-4 py-14">
+      <section className="max-w-5xl mx-auto px-4 py-8">
         <motion.div
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} className="text-center mb-10"
+          viewport={{ once: true }} className="text-center mb-6"
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-2">{t('home.browseTitle')}</h2>
           <p className="text-gray-500 dark:text-gray-400 text-sm">{t('home.browseSubtitle')}</p>
