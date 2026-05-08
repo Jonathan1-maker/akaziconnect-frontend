@@ -16,14 +16,12 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [devCode, setDevCode] = useState(''); // shown in dev when no Twilio
 
   const handleSendOTP = async (e) => {
     e.preventDefault();
     setLoading(true); setError('');
     try {
       const { data } = await api.post('/auth/forgot-password', { phone });
-      if (data.code) setDevCode(data.code); // dev mode
       setStep(2);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to send code');
@@ -89,11 +87,6 @@ export default function ResetPasswordPage() {
           </form>
         ) : step === 2 ? (
           <form onSubmit={(e) => { e.preventDefault(); if (code.length === 6) setStep(3); else setError('Enter the 6-digit code'); }} className="flex flex-col gap-4">
-            {devCode && (
-              <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-xl px-4 py-3 text-sm text-yellow-700 dark:text-yellow-400">
-                🧪 Dev mode — your code is: <span className="font-bold font-mono text-lg">{devCode}</span>
-              </div>
-            )}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">6-Digit Code</label>
               <input type="text" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
