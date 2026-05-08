@@ -10,7 +10,8 @@ const API = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://loca
 export default function WorkerCard({ worker }) {
   const [imgError, setImgError] = useState(false);
 
-  const showImage = worker.photo && !imgError;
+  const photoUrl = worker.photo ? (worker.photo.startsWith('http') ? worker.photo : `${API}${worker.photo}`) : null;
+  const showImage = !!photoUrl && !imgError;
 
   return (
     <motion.div
@@ -25,7 +26,7 @@ export default function WorkerCard({ worker }) {
           {showImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={`${API}${worker.photo}`}
+              src={photoUrl}
               alt={worker.name}
               onError={() => setImgError(true)}
               className="w-full h-full object-cover"

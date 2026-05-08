@@ -80,7 +80,7 @@ export default function WorkerProfilePage() {
           {worker.photo && !imgError ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={`${API}${worker.photo}`}
+              src={worker.photo.startsWith('http') ? worker.photo : `${API}${worker.photo}`}
               alt={worker.name}
               onError={() => setImgError(true)}
               className="w-full h-full object-cover"

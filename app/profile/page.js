@@ -74,7 +74,7 @@ export default function WorkerProfilePage() {
     }
   };
 
-  const currentPhoto = photoPreview || (worker?.photo ? `${API}${worker.photo}` : null);
+  const currentPhoto = photoPreview || (worker?.photo ? (worker.photo.startsWith('http') ? worker.photo : `${API}${worker.photo}`) : null);
 
   if (loading || fetching) return (
     <div className="max-w-2xl mx-auto px-4 py-10 animate-pulse flex flex-col gap-4">
