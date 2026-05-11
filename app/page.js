@@ -107,8 +107,8 @@ export default function HomePage() {
 
   const stats = [
     { value: '500+', label: t('home.statsWorkers'),    icon: '👷' },
-    { value: '12',   label: t('home.statsDistricts'),  icon: '📍' },
-    { value: '5',    label: t('home.statsCategories'), icon: '🗂️' },
+    { value: '30+',   label: t('home.statsDistricts'),  icon: '📍' },
+    { value: '20+',    label: t('home.statsCategories'), icon: '🗂️' },
     { value: '4.8★', label: t('home.statsRating'),     icon: '⭐' },
   ];
 
