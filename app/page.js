@@ -214,7 +214,8 @@ export default function HomePage() {
                       <motion.span
                         className="absolute inset-y-0 left-0 bg-white/40 rounded-full"
                         initial={{ width: '0%' }}
-                        animate={{ width: '100%' }}
+                        animate={{
+                           width: '100%' }}
                         transition={{ duration: 12, ease: 'linear' }}
                         key={`progress-${current}`}
                       />

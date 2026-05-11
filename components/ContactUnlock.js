@@ -6,8 +6,9 @@ import { useAuth } from '@/lib/AuthContext';
 
 export default function ContactUnlock({ worker }) {
   const { user } = useAuth();
-  const [step, setStep] = useState('locked'); // locked | phone | ussd | processing | waiting | unlocked
+  const [step, setStep] = useState('locked'); // locked | phone | momo | ussd | processing | waiting | unlocked
   const [guestPhone, setGuestPhone] = useState('');
+  const [momoPhone, setMomoPhone] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [paymentData, setPaymentData] = useState(null);
   const [error, setError] = useState('');
@@ -51,10 +52,12 @@ export default function ContactUnlock({ worker }) {
     try {
       const body = { workerId: worker._id };
       if (!user) body.guestPhone = phone || customerPhone;
+      if (momoPhone) body.momoPhone = momoPhone;
+      else if (phone) body.momoPhone = phone;
 
       const { data } = await api.post('/payments/initiate', body);
       setPaymentData(data);
-      setStep('ussd');
+      setStep(data.momoRequested ? 'momo' : 'ussd');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to initiate payment');
       if (err.response?.data?.hasAccess) setStep('unlocked');
@@ -164,6 +167,39 @@ export default function ContactUnlock({ worker }) {
               </button>
             </div>
           </form>
+        </motion.div>
+      )}
+
+      {/* ── MoMo Push Sent ── */}
+      {step === 'momo' && paymentData && (
+        <motion.div key="momo" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-2xl p-5"
+        >
+          <div className="text-4xl mb-3 text-center">📲</div>
+          <p className="font-bold text-gray-800 dark:text-white mb-1 text-center">Check your phone!</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 text-center">
+            {paymentData.message}
+          </p>
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-xl p-3 mb-4 text-xs text-yellow-700 dark:text-yellow-400 flex flex-col gap-1">
+            <p>1. A MoMo payment request was sent to your phone</p>
+            <p>2. Open the MTN MoMo notification and approve</p>
+            <p>3. Come back and click <span className="font-semibold">"I've Paid"</span> below</p>
+          </div>
+          <div className="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500 mb-4 px-1">
+            <span className="font-mono">Ref: {paymentData.reference}</span>
+            <span>500 RWF</span>
+          </div>
+          {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
+          <div className="flex gap-3">
+            <motion.button whileTap={{ scale: 0.97 }} onClick={confirm}
+              className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-semibold text-sm transition-colors">
+              ✓ I've Paid
+            </motion.button>
+            <button onClick={() => setStep('ussd')}
+              className="px-4 py-3 rounded-xl text-sm text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+              Use USSD
+            </button>
+          </div>
         </motion.div>
       )}
 
