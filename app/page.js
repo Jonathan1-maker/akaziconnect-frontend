@@ -12,38 +12,33 @@ const stagger = { show: { transition: { staggerChildren: 0.08 } } };
 
 const slides = [
   {
-    id: 0, icon: '🔧', category: 'Plumbing', label: 'Expert Plumbers',
-    desc: 'Pipe repairs, installations & water systems',
+    id: 0, icon: '🔧', category: 'Plumbing', labelKey: 'home.slide0Label', descKey: 'home.slide0Desc',
     src: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=1400&q=80',
     fallbackColor: 'from-blue-800 to-blue-600',
   },
   {
-    id: 1, icon: '⚡', category: 'Electrical', label: 'Certified Electricians',
-    desc: 'Wiring, installations & electrical repairs',
+    id: 1, icon: '⚡', category: 'Electrical', labelKey: 'home.slide1Label', descKey: 'home.slide1Desc',
     src: 'https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?auto=format&fit=crop&w=1400&q=80',
     fallbackColor: 'from-yellow-800 to-yellow-600',
   },
   {
-    id: 2, icon: '🧹', category: 'Cleaning', label: 'Professional Cleaners',
-    desc: 'Home, office & deep cleaning services',
+    id: 2, icon: '🧹', category: 'Cleaning', labelKey: 'home.slide2Label', descKey: 'home.slide2Desc',
     src: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1400&q=80',
     fallbackColor: 'from-green-800 to-green-600',
   },
   {
-    id: 3, icon: '🏗️', category: 'Construction', label: 'Skilled Builders',
-    desc: 'Construction, renovation & masonry work',
+    id: 3, icon: '🏗️', category: 'Construction', labelKey: 'home.slide3Label', descKey: 'home.slide3Desc',
     src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1400&q=80',
     fallbackColor: 'from-orange-800 to-orange-600',
   },
   {
-    id: 4, icon: '🚚', category: 'Delivery', label: 'Reliable Drivers',
-    desc: 'Fast & safe delivery across Kigali',
+    id: 4, icon: '🚚', category: 'Delivery', labelKey: 'home.slide4Label', descKey: 'home.slide4Desc',
     src: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1400&q=80',
     fallbackColor: 'from-purple-800 to-purple-600',
   },
 ];
 
-function SlideBackground({ slide }) {
+function SlideBackground({ slide, alt }) {
   const [imgError, setImgError] = useState(false);
   useEffect(() => { setImgError(false); }, [slide.id]);
 
@@ -62,7 +57,7 @@ function SlideBackground({ slide }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={slide.src}
-        alt={slide.label}
+        alt={slide.alt}
         onError={() => setImgError(true)}
         className="absolute inset-0 w-full h-full object-cover object-center"
       />
@@ -138,7 +133,7 @@ export default function HomePage() {
             transition={{ duration: 1 }}
             className="absolute inset-0"
           >
-            <SlideBackground slide={slide} />
+            <SlideBackground slide={slide} alt={t(slide.labelKey)} />
           </motion.div>
         </AnimatePresence>
 
@@ -192,10 +187,10 @@ export default function HomePage() {
                   {slide.icon} {slide.category} · AkaziConnect 🇷🇼
                 </span>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg">
-                  {slide.label}
+                  {t(slide.labelKey)}
                 </h1>
                 <p className="text-white/75 text-sm sm:text-base drop-shadow">
-                  {slide.desc}
+                  {t(slide.descKey)}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -310,10 +305,10 @@ export default function HomePage() {
         <section className="max-w-5xl mx-auto px-4 py-8">
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">💼 Available Jobs</h2>
-              <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Latest opportunities posted by companies</p>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">{t('home.availableJobs')}</h2>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">{t('home.availableJobsSubtitle')}</p>
             </div>
-            <a href="/jobs" className="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:underline whitespace-nowrap">View all →</a>
+            <a href="/jobs" className="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:underline whitespace-nowrap">{t('home.viewAllJobs')}</a>
           </motion.div>
           <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
             {recentJobs.map((job, i) => (
@@ -344,7 +339,7 @@ export default function HomePage() {
           </motion.div>
           <div className="text-center mt-6">
             <a href="/jobs" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-colors">
-              See All Jobs →
+              {t('home.seeAllJobs')}
             </a>
           </div>
         </section>
@@ -384,7 +379,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} className="text-center mb-10"
         >
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">What people say</h2>
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">{t('home.whatPeopleSay')}</h2>
         </motion.div>
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-5">
           {[

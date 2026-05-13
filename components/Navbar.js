@@ -284,13 +284,13 @@ export default function Navbar() {
                 {t('nav.login')}
               </Link>
               <Link href="/register" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                Register
+                {t('nav.register')}
               </Link>
               <Link href="/register-worker" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl transition-colors">
                 {t('nav.joinAsWorker')}
               </Link>
               <Link href="/register-company" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl transition-colors">
-                Post Jobs
+                {t('nav.postJobsCompany')}
               </Link>
             </>
           )}
@@ -344,7 +344,7 @@ export default function Navbar() {
               ) : (
                 <div className="flex flex-col gap-2 mt-2">
                   <Link href="/login" onClick={() => setOpen(false)} className="text-gray-600 dark:text-gray-300 py-2">{t('nav.login')}</Link>
-                  <Link href="/register" onClick={() => setOpen(false)} className="text-gray-600 dark:text-gray-300 py-2">Register</Link>
+                  <Link href="/register" onClick={() => setOpen(false)} className="text-gray-600 dark:text-gray-300 py-2">{t('nav.register')}</Link>
                   <Link href="/register-worker" onClick={() => setOpen(false)} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-center transition-colors">{t('nav.joinAsWorker')}</Link>
                   <Link href="/register-company" onClick={() => setOpen(false)} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2.5 rounded-xl text-center transition-colors">{t('nav.postJobsCompany')}</Link>
                 </div>
