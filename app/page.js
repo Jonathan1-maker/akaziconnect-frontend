@@ -80,6 +80,7 @@ export default function HomePage() {
   const [location, setLocation] = useState('Kigali');
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
+  const [recentJobs, setRecentJobs] = useState([]);
 
   const next = useCallback(() => setCurrent((p) => (p + 1) % slides.length), []);
   const prev = useCallback(() => setCurrent((p) => (p - 1 + slides.length) % slides.length), []);
@@ -92,6 +93,7 @@ export default function HomePage() {
 
   useEffect(() => {
     api.get('/categories').then((r) => setCategories(r.data)).catch(() => {});
+    api.get('/jobs?limit=6').then((r) => setRecentJobs(r.data.jobs || [])).catch(() => {});
   }, []);
 
   const handleSearch = (e) => {
@@ -302,6 +304,51 @@ export default function HomePage() {
           )}
         </AnimatePresence>
       </section>
+
+      {/* ── Available Jobs ── */}
+      {recentJobs.length > 0 && (
+        <section className="max-w-5xl mx-auto px-4 py-8">
+          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">💼 Available Jobs</h2>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Latest opportunities posted by companies</p>
+            </div>
+            <a href="/jobs" className="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:underline whitespace-nowrap">View all →</a>
+          </motion.div>
+          <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true }}>
+            {recentJobs.map((job, i) => (
+              <motion.a key={job._id} href={`/jobs/${job._id}`} variants={fadeUp}
+                className="bg-white dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-4 hover:shadow-md transition-shadow block"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-xl flex-shrink-0">
+                    {job.category?.icon || '💼'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-gray-800 dark:text-white text-sm truncate">{job.title}</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mt-0.5">{job.companyName}</p>
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">📍 {job.location}</span>
+                      {job.salary && <span className="text-xs text-green-600 dark:text-green-400 font-medium">💵 {job.salary}</span>}
+                    </div>
+                  </div>
+                  <span className={`text-xs font-semibold px-2 py-0.5 rounded-full flex-shrink-0 ${
+                    job.type === 'full-time' ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' :
+                    job.type === 'part-time' ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' :
+                    'bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
+                  }`}>{job.type}</span>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 line-clamp-2">{job.description}</p>
+              </motion.a>
+            ))}
+          </motion.div>
+          <div className="text-center mt-6">
+            <a href="/jobs" className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-colors">
+              See All Jobs →
+            </a>
+          </div>
+        </section>
+      )}
 
       {/* ── How it works ── */}
       <section className="bg-gray-50 dark:bg-slate-800/60 py-14 px-4">
